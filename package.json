@@ -1,0 +1,18 @@
+{
+  "name": "Api_LoL",
+  "version": "1.0.0",
+  "description": "Api de acesso a API do League of Legend",
+  "main": "server.js",
+  "author": "Team NodeJS Pecege",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "nodemon": "^2.0.6"
+  }
+}
