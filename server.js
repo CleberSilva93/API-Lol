@@ -1,9 +1,8 @@
-var express = require("express");
+var customExpress = require("./config/customExpress");
 var cors = require("cors");
+require('dotenv').config();
 
-var app = express();
-
-app.use(express.json());
+var app = customExpress();
 
 app.use(cors());
 
