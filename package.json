@@ -2,7 +2,7 @@
   "name": "Api_LoL",
   "version": "1.0.0",
   "description": "Api de acesso a API do League of Legend",
-  "main": "server.js",
+  "main": "src/server.js",
   "author": "Team NodeJS Pecege",
   "license": "MIT",
   "scripts": {
