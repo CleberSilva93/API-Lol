@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Api de acesso a API do League of Legend",
   "main": "src/server.js",
-  "author": "Team NodeJS Pecege",
+  "author": "Team-NodeJS-Pecege",
   "license": "MIT",
   "scripts": {
     "start": "nodemon src/server.js",
