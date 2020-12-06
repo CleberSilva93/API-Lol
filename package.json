@@ -6,7 +6,8 @@
   "author": "Team NodeJS Pecege",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.21.0",
@@ -16,6 +17,8 @@
   },
   "devDependencies": {
     "cors": "^2.8.5",
-    "nodemon": "^2.0.6"
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6",
+    "supertest": "^6.0.1"
   }
 }
