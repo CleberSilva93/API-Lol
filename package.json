@@ -14,8 +14,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "rate-limiter-flexible": "^2.1.13",
-    "redis": "^3.0.2"
+    "rate-limiter-flexible": "^2.1.13"
   },
   "devDependencies": {}
 }
