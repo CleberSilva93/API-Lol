@@ -4,6 +4,7 @@ require("dotenv").config({
 
 const express = require("express");
 const cors = require("cors");
+const rateLimiterMiddleware = require("./shared/http/middlewares/rateLimiterMiddleware");
 
 class AppController {
   constructor() {
@@ -15,6 +16,7 @@ class AppController {
   middlewares() {
     this.express.use(express.json());
     this.express.use(cors());
+    this.express.use(rateLimiterMiddleware);
   }
 
   routes() {
