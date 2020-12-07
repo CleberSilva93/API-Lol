@@ -3,4 +3,4 @@ yarn.lock
 .editorconfig
 .env
 __tests__
-
+coverage
