@@ -2,4 +2,5 @@ node_modules
 yarn.lock
 .editorconfig
 .env
-**__tests__/
+__tests__
+
