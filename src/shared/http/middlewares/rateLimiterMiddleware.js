@@ -9,8 +9,9 @@ const rateLimiter = new RateLimiterMemory(opts);
 
 const rateLimiterMiddleware = (req, res, next) => {
   rateLimiter
-    .consume(req.ip)
+    .consume(req.clientIp)
     .then(() => {
+      console.log(req.clientIp);
       next();
     })
     .catch(() => {
