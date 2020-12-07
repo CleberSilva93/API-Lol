@@ -26,6 +26,7 @@ class Invocador {
       invocador,
       partidas: partidas.data.matches,
       masterias: masterias.data.slice(0, 5),
+      imagemPerfil: `/iconePerfil/${invocador.profileIconId}`
     };
   }
 

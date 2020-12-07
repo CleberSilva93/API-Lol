@@ -1,1 +1,0 @@
-Riot.DDragon.m={"n":{"item":"10.24.1","rune":"10.24.1","mastery":"10.24.1","summoner":"10.24.1","champion":"10.24.1","profileicon":"10.24.1","map":"10.24.1","language":"10.24.1","sticker":"10.24.1"},"v":"10.24.1","l":"en_US","cdn":null,"dd":"10.24.1","lg":"10.24.1","css":"10.24.1","profileiconmax":28};
