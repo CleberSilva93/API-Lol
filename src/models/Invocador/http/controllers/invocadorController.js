@@ -1,4 +1,4 @@
-const Invocador = require("../models/invocador");
+const Invocador = require("../../services/invocador");
 
 class InvocadorController {
   async invocador(req, res) {
