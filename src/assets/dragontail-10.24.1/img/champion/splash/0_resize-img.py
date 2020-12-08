@@ -15,13 +15,17 @@ champions = ["Aatrox", "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "
              "Udyr", "Urgot", "Varus", "Vayne", "Veigar", "Velkoz", "Vi", "Viktor", "Vladimir", "Volibear", "Warwick",
              "Xayah", "Xerath", "XinZhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Ziggs", "Zilean", "Zoe", "Zyra"]
 
-crop_baixo = ['Alistar','Amumu','Anivia','Chogath','FiddleSticks','Gnar','Heimerdinger','Katarina','Kayn','Khazix','KogMaw','Lucian','Malphite','Maokai','Nocturne','Nunu','Rammus','RekSai','Diana','Skarner','TahmKench','Teemo','Twitch','Udyr','Velkoz','Warwick','Zac','Ziggs']
+crop_baixo = ['Aatrox','Alistar','Amumu','Anivia','Annie','Blitzcrank','Cassiopeia','Corki','Chogath','FiddleSticks','Gnar','Heimerdinger','Katarina','Kayn','Khazix','KogMaw','Lucian','Malphite','Maokai','Nocturne','Nunu','Rammus','RekSai','Diana','Skarner','TahmKench','Teemo','Twitch','Udyr','Velkoz','Warwick','Zac','Ziggs']
 
-mais_crop = ['KogMaw','Malphite']
+mais_crop = ['KogMaw','Malphite','Gnar','Khazix']
 
-for x in mais_crop:
+crop_cabeca = ['Taric','Leona','Fiora','Galio','Illaoi','Irelia','Yone','Volibear','Yorick','Swain','Shen','Sett']
+
+ajustes = ['Malphite']
+
+for x in ajustes:
     image = Image.open(x+'_0.jpg')
-    box = (0, 250, 1215, 552)
+    box = (0, 350, 1215, 525)
     cropped_image = image.crop(box)
-    cropped_image.save(x+'_0_mobile.jpg')
+    cropped_image.save(x+'_0_desktop.jpg')
 
