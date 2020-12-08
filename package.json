@@ -6,7 +6,7 @@
   "author": "Team-NodeJS-Pecege",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/server.js"
+    "start": "node src/server.js"
   },
   "dependencies": {
     "axios": "^0.21.0",
