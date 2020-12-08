@@ -1,4 +1,5 @@
 // const invocador = require("../controllers/invocadorController");
+const champions = require('../assets/champions.json');
 require("dotenv").config({
   path: ".env",
 });
@@ -15,10 +16,22 @@ const instance = axios.create({
 });
 
 class Invocador {
+
+  async championImages(partidas){
+    await Object.entries(partidas).map(partida => {
+      let champ = champions.find(champion => parseInt(champion.key) === partida[1].champion);
+      partida[1].champion = champ;
+    });
+  }
+
+
   async dadosInvocador(invocador) {
     const partidas = await instance.get(
       `/match/v4/matchlists/by-account/${invocador.accountId}?endIndex=10`
     );
+
+    this.championImages(partidas.data.matches);
+
     const masterias = await instance.get(
       `/champion-mastery/v4/champion-masteries/by-summoner/${invocador.id}`
     );
