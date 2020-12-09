@@ -54,6 +54,12 @@ class Invocador {
       let dadosParticipanteNaPartida = {
         win: dadosParticipante.stats.win,
         duration: dadosPartida.data.gameDuration, // Está em segundos
+        kda:
+          dadosParticipante.stats.kills +
+          "/" +
+          dadosParticipante.stats.deaths +
+          "/" +
+          dadosParticipante.stats.assists,
       };
 
       // contando quantas partidas são vitoriosas
