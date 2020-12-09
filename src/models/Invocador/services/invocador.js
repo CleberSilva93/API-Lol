@@ -81,7 +81,7 @@ class Invocador {
     );
     return {
       invocador,
-      partidas: partidas.data.matches,
+      partidas: await partidas.data.matches,
       winRate: winRate * 10,
       masterias: masterias.data.slice(0, 5),
       imagemPerfil: `/iconePerfil/${invocador.profileIconId}`,
