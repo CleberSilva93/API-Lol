@@ -81,10 +81,10 @@ class Invocador {
     );
     return {
       invocador,
-      partidas: await partidas.data.matches,
+      imagemPerfil: `/datadragon/iconePerfil/${invocador.profileIconId}`,
       winRate: winRate * 10,
-      masterias: masterias.data.slice(0, 5),
-      imagemPerfil: `/iconePerfil/${invocador.profileIconId}`,
+      partidas: await partidas.data.matches,
+      masterias: masterias.data.slice(0, 5)
     };
   }
 
