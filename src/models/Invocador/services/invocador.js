@@ -16,6 +16,14 @@ const instance = axios.create({
   },
 });
 
+//converte a duração da partida de segundos para minutos
+function makeMinutes(matchTime) {
+  let minutes = Math.floor(matchTime / 60);
+  let seconds = (((matchTime / 60) - minutes)*60).toFixed(0);
+  if (seconds < 10) seconds = "0" + seconds;
+    return `${minutes}:${seconds}`;
+}
+
 class Invocador {
   async championImages(partidas) {
     await Object.entries(partidas).map((partida) => {
@@ -53,7 +61,7 @@ class Invocador {
       // Adicionar nesse objeto todos os elementos que precisamos retornar
       let dadosParticipanteNaPartida = {
         win: dadosParticipante.stats.win,
-        duration: dadosPartida.data.gameDuration, // Está em segundos
+        duration: makeMinutes(dadosPartida.data.gameDuration), // Está em segundos
         kda:
           dadosParticipante.stats.kills +
           "/" +
