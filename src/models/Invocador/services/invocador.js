@@ -67,7 +67,6 @@ class Invocador {
         winRate++;
       }
       partida[1].dados = dadosParticipanteNaPartida;
-      partida[1].teste = dadosPartida.data;
       partida[1].timestamp =
         dataDoGame.getDate() +
         "/" +
