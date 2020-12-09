@@ -27,10 +27,47 @@ class Invocador {
   }
 
   async dadosInvocador(invocador) {
+    let winRate = 0;
     const partidas = await instance.get(
       `/match/v4/matchlists/by-account/${invocador.accountId}?endIndex=10`
     );
 
+    Object.entries(partidas.data.matches).map(async (partida) => {
+      let matchId = partida[1].gameId;
+      let dadosPartida = await instance.get(`/match/v4/matches/${matchId}`);
+
+      // Identifica o particpante na partida
+      let dadosParticipante = dadosPartida.data.participantIdentities.find(
+        (participant) => participant.player.summonerName === invocador.name
+      );
+
+      // Captura as informações do participante dentro da partida
+      dadosParticipante = await dadosPartida.data.participants.find(
+        (participant) =>
+          participant.participantId === dadosParticipante.participantId
+      );
+
+      // transforma unix em uma data
+      let dataDoGame = new Date(dadosPartida.data.gameCreation);
+
+      // Adicionar nesse objeto todos os elementos que precisamos retornar
+      let dadosParticipanteNaPartida = {
+        win: dadosParticipante.stats.win,
+        duration: dadosPartida.data.gameDuration, // Está em segundos
+      };
+
+      // contando quantas partidas são vitoriosas
+      if (dadosParticipanteNaPartida.win) {
+        winRate++;
+      }
+      partida[1].dados = dadosParticipanteNaPartida;
+      partida[1].timestamp =
+        dataDoGame.getDate() +
+        "/" +
+        (dataDoGame.getMonth() + 1) +
+        "/" +
+        dataDoGame.getFullYear();
+    });
     this.championImages(partidas.data.matches);
 
     const masterias = await instance.get(
@@ -39,6 +76,7 @@ class Invocador {
     return {
       invocador,
       partidas: partidas.data.matches,
+      winRate: winRate * 10,
       masterias: masterias.data.slice(0, 5),
       imagemPerfil: `/iconePerfil/${invocador.profileIconId}`,
     };
