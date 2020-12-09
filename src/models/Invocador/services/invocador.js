@@ -54,12 +54,6 @@ class Invocador {
       let dadosParticipanteNaPartida = {
         win: dadosParticipante.stats.win,
         duration: dadosPartida.data.gameDuration, // Está em segundos
-        data:
-          dataDoGame.getDate() +
-          "/" +
-          (dataDoGame.getMonth() + 1) +
-          "/" +
-          dataDoGame.getFullYear(),
       };
 
       // contando quantas partidas são vitoriosas
@@ -67,6 +61,12 @@ class Invocador {
         winRate++;
       }
       partida[1].dados = dadosParticipanteNaPartida;
+      partida[1].timestamp =
+        dataDoGame.getDate() +
+        "/" +
+        (dataDoGame.getMonth() + 1) +
+        "/" +
+        dataDoGame.getFullYear();
     });
     this.championImages(partidas.data.matches);
 
