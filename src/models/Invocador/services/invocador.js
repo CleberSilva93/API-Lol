@@ -101,7 +101,10 @@ class Invocador {
     let dados = await instance.get(
       `/league/v4/entries/by-summoner/${summonerId}`
     );
-
+  
+    dados.data.forEach(q => {
+      q.emblem = `/datadragon/ranked-emblems/${q.tier}-${q.rank}`
+    })
     return dados.data;
   }
 

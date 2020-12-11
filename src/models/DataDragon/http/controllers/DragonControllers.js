@@ -44,6 +44,16 @@ class DragonControllers {
       return res.status(error.status).json({ error: error.message });
     }
   }
+
+  async rankedEmblem(req,res){
+    try{
+      const path = await Dragon.rankedEmblemPath(req.params.tier);
+      res.set("Content-Type", "image/png");
+      res.sendFile(path);
+    }catch(error){
+      return res.status(error.status).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = new DragonControllers();
