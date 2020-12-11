@@ -19,9 +19,9 @@ const instance = axios.create({
 //converte a duração da partida de segundos para minutos
 function makeMinutes(matchTime) {
   let minutes = Math.floor(matchTime / 60);
-  let seconds = (((matchTime / 60) - minutes)*60).toFixed(0);
+  let seconds = ((matchTime / 60 - minutes) * 60).toFixed(0);
   if (seconds < 10) seconds = "0" + seconds;
-    return `${minutes}:${seconds}`;
+  return `${minutes}:${seconds}`;
 }
 
 class Invocador {
@@ -82,6 +82,7 @@ class Invocador {
         "/" +
         dataDoGame.getFullYear();
     });
+
     this.championImages(partidas.data.matches);
 
     const masterias = await instance.get(
@@ -91,16 +92,26 @@ class Invocador {
       invocador,
       imagemPerfil: `/datadragon/iconePerfil/${invocador.profileIconId}`,
       winRate: winRate * 10,
-      partidas: await partidas.data.matches,
-      masterias: masterias.data.slice(0, 5)
+      partidas: partidas.data.matches,
+      masterias: masterias.data.slice(0, 5),
     };
+  }
+
+  async capturarRank(summonerId) {
+    let dados = await instance.get(
+      `/league/v4/entries/by-summoner/${summonerId}`
+    );
+
+    return dados.data;
   }
 
   async buscaPorNome(nome) {
     const invocador = await instance.get(
       `/summoner/v4/summoners/by-name/${encodeURIComponent(nome)}`
     );
-    const dados = await this.dadosInvocador(invocador.data);
+    let dados = await this.dadosInvocador(invocador.data);
+    const rank = await this.capturarRank(dados.masterias[1].summonerId);
+    dados.invocador.rank = rank;
     return dados;
   }
 }
