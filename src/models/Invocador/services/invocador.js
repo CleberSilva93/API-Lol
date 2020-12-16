@@ -160,6 +160,7 @@ class Invocador {
             freshBlood: rank.freshBlood,
             hotStreak: rank.hotStreak,
             emblem: rank.emblem,
+            flag: rank.flag,
           };
         }),
       });

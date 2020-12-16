@@ -28,6 +28,7 @@ module.exports = mongoose.model("Invocador", {
       freshBlood: { type: Boolean },
       hotStreak: { type: Boolean },
       emblem: { type: String },
+      flag: { type: String },
     },
     {
       leagueId: { type: String },
@@ -44,6 +45,7 @@ module.exports = mongoose.model("Invocador", {
       freshBlood: { type: Boolean },
       hotStreak: { type: Boolean },
       emblem: { type: String },
+      flag: { type: String },
     },
   ],
 });
