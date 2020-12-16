@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-module.exports = mongoose.model("masterias", {
+module.exports = mongoose.model("Masterias", {
   idInvocador: { type: String },
   championId: {
     type: Number,

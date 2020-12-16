@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-module.exports = mongoose.model("partidas", {
+module.exports = mongoose.model("Partidas", {
   idInvocador: { type: String },
   platformId: { type: String },
   gameId: {

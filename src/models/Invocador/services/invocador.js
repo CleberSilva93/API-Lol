@@ -6,9 +6,9 @@ const makeMinutes = require("../../../shared/utils/makeMinutes");
 const champions = require("../../../assets/champions.json");
 const modelinvocation = require("../../../database/model/Invocador");
 
-const modelpartidas = require("../../../database/model/Partidas");
+const modelpartidas = require("../../../database/model/partidas");
 
-const modelmasterias = require("../../../database/model/Masterias");
+const modelmasterias = require("../../../database/model/masterias");
 
 const axios = require("axios");
 const devKey = process.env.DEV_KEY;
