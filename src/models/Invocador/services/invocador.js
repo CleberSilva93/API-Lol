@@ -1,3 +1,6 @@
+require("dotenv").config({
+  path: ".env",
+});
 // const invocador = require("../controllers/invocadorController");
 const makeMinutes = require("../../../shared/utils/makeMinutes");
 const champions = require("../../../assets/champions.json");
@@ -5,10 +8,7 @@ const invocation = require("../../../database/model/Invocador");
 
 const partidas = require("../../../database/model/Partidas");
 
-const masterias = require("../../../database/model/masterias");
-require("dotenv").config({
-  path: ".env",
-});
+const masterias = require("../../../database/model/Masterias");
 
 const axios = require("axios");
 const devKey = process.env.DEV_KEY;
