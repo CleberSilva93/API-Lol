@@ -224,17 +224,17 @@ class Invocador {
   }
 
   async findMongoDb(name) {
-    let retorno = await invocation.find({
+    let retorno = await modelinvocation.find({
       name: { $regex: name, $options: "i" },
     });
     if (retorno.length == 0) {
       return false;
     }
-    var partida = await partidas.find({
+    var partida = await modelpartidas.find({
       idInvocador: retorno[0].id,
     });
 
-    var masteria = await masterias.find({
+    var masteria = await modelmasterias.find({
       idInvocador: retorno[0].id,
     });
     return { invocador: retorno[0], partida, masteria };
