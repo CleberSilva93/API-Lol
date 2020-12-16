@@ -54,6 +54,16 @@ class DragonControllers {
       return res.status(error.status).json({ error: error.message });
     }
   }
+
+  async rankedFlag(req,res){
+    try{
+      const path = await Dragon.rankedFlagPath(req.params.tier);
+      res.set("Content-type","image/png");
+      res.sendFile(path);
+    }catch(error){
+      return res.status(error.status).json({error: error.message});
+    }
+  }
 }
 
 module.exports = new DragonControllers();

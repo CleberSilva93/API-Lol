@@ -30,6 +30,12 @@ class Dragon {
       `src/assets/ranked-emblems/${tier}.png`
     );
   }
+
+  async rankedFlagPath(tier){
+    return path.resolve(
+      `src/assets/ranked-flags/${tier}.png`
+    );
+  }
 }
 
 module.exports = new Dragon();
