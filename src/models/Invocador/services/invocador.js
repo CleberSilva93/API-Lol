@@ -208,11 +208,11 @@ class Invocador {
 
       await invocador.save();
 
-      var partida = await partidas.find({
+      var partida = await modelpartidas.find({
         idInvocador: dados.invocador.id,
       });
 
-      var masteria = await masterias.find({
+      var masteria = await modelmasterias.find({
         idInvocador: dados.invocador.id,
       });
 
