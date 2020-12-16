@@ -120,7 +120,7 @@ class Invocador {
 
   async dadosInvocador(invocador) {
     try {
-      let teste = [];
+      let dados = [];
       let winRate = 0;
       let partidas = await instance.get(
         `/match/v4/matchlists/by-account/${invocador.accountId}?endIndex=10`
@@ -160,9 +160,9 @@ class Invocador {
           (dataDoGame.getMonth() + 1) +
           "/" +
           dataDoGame.getFullYear();
-        teste.push(game.data);
+        dados.push(game.data);
       }
-      await this.championImages(teste);
+      await this.championImages(dados);
 
       const masterias = await instance.get(
         `/champion-mastery/v4/champion-masteries/by-summoner/${invocador.id}`
@@ -171,7 +171,7 @@ class Invocador {
         invocador,
         imagemPerfil: `/datadragon/iconePerfil/${invocador.profileIconId}`,
         winRate: winRate * 10,
-        partidas: teste,
+        partidas: dados,
         masterias: await masterias.data.slice(0, 5),
       };
     } catch (error) {
@@ -184,11 +184,11 @@ class Invocador {
     let dados = await instance.get(
       `/league/v4/entries/by-summoner/${summonerId}`
     );
-  
-    dados.data.forEach(q => {
-      q.emblem = `/datadragon/ranked-emblems/${q.tier}-${q.rank}`
-      q.flag = `/datadragon/ranked-flags/${q.tier}`
-    })
+
+    dados.data.forEach((q) => {
+      q.emblem = `/datadragon/ranked-emblems/${q.tier}-${q.rank}`;
+      q.flag = `/datadragon/ranked-flags/${q.tier}`;
+    });
     return dados.data;
   }
 
