@@ -1,8 +1,15 @@
 // const invocador = require("../controllers/invocadorController");
+const makeMinutes = require("../../../shared/utils/makeMinutes");
 const champions = require("../../../assets/champions.json");
+const invocation = require("../../../database/model/Invocador");
+
+const partidas = require("../../../database/model/Partidas");
+
+const masterias = require("../../../database/model/masterias");
 require("dotenv").config({
   path: ".env",
 });
+
 const axios = require("axios");
 const devKey = process.env.DEV_KEY;
 const instance = axios.create({
@@ -15,15 +22,6 @@ const instance = axios.create({
     "X-Riot-Token": devKey,
   },
 });
-
-//converte a duração da partida de segundos para minutos
-function makeMinutes(matchTime) {
-  let minutes = Math.floor(matchTime / 60);
-  let seconds = ((matchTime / 60 - minutes) * 60).toFixed(0);
-  if (seconds < 10) seconds = "0" + seconds;
-  return `${minutes}:${seconds}`;
-}
-
 class Invocador {
   async championImages(partidas) {
     await Object.entries(partidas).map((partida) => {
@@ -35,88 +33,211 @@ class Invocador {
   }
 
   async dadosInvocador(invocador) {
-    let winRate = 0;
-    const partidas = await instance.get(
-      `/match/v4/matchlists/by-account/${invocador.accountId}?endIndex=10`
-    );
-
-    Object.entries(partidas.data.matches).map(async (partida) => {
-      let matchId = partida[1].gameId;
-      let dadosPartida = await instance.get(`/match/v4/matches/${matchId}`);
-
-      // Identifica o particpante na partida
-      let dadosParticipante = dadosPartida.data.participantIdentities.find(
-        (participant) => participant.player.summonerName === invocador.name
+    try {
+      let dados = [];
+      let winRate = 0;
+      let partidas = await instance.get(
+        `/match/v4/matchlists/by-account/${invocador.accountId}?endIndex=10`
       );
 
-      // Captura as informações do participante dentro da partida
-      dadosParticipante = await dadosPartida.data.participants.find(
-        (participant) =>
-          participant.participantId === dadosParticipante.participantId
-      );
+      for (let partida of partidas.data.matches) {
+        let game = await instance.get(`/match/v4/matches/${partida.gameId}`);
+        let dadosParticipantes = game.data.participantIdentities.find(
+          (participant) => participant.player.summonerName === invocador.name
+        );
 
-      // transforma unix em uma data
-      let dataDoGame = new Date(dadosPartida.data.gameCreation);
+        let dadosParticipante = game.data.participants.find(
+          (participant) =>
+            participant.participantId === dadosParticipantes.participantId
+        );
 
-      // Adicionar nesse objeto todos os elementos que precisamos retornar
-      let dadosParticipanteNaPartida = {
-        win: dadosParticipante.stats.win,
-        duration: makeMinutes(dadosPartida.data.gameDuration), // Está em segundos
-        kda:
-          dadosParticipante.stats.kills +
+        let dataDoGame = new Date(game.data.gameCreation);
+
+        let dadosParticipanteNaPartida = {
+          win: dadosParticipante.stats.win,
+          duration: makeMinutes(game.data.gameDuration),
+          kda:
+            dadosParticipante.stats.kills +
+            "/" +
+            dadosParticipante.stats.deaths +
+            "/" +
+            dadosParticipante.stats.assists,
+        };
+        if (dadosParticipanteNaPartida.win) {
+          winRate++;
+        }
+        game.data = partida;
+        game.data.dados = dadosParticipanteNaPartida;
+        game.data.timestamp =
+          dataDoGame.getDate() +
           "/" +
-          dadosParticipante.stats.deaths +
+          (dataDoGame.getMonth() + 1) +
           "/" +
-          dadosParticipante.stats.assists,
-      };
-
-      // contando quantas partidas são vitoriosas
-      if (dadosParticipanteNaPartida.win) {
-        winRate++;
+          dataDoGame.getFullYear();
+        dados.push(game.data);
       }
-      partida[1].dados = dadosParticipanteNaPartida;
-      partida[1].timestamp =
-        dataDoGame.getDate() +
-        "/" +
-        (dataDoGame.getMonth() + 1) +
-        "/" +
-        dataDoGame.getFullYear();
-    });
+      await this.championImages(dados);
 
-    this.championImages(partidas.data.matches);
-
-    const masterias = await instance.get(
-      `/champion-mastery/v4/champion-masteries/by-summoner/${invocador.id}`
-    );
-    return {
-      invocador,
-      imagemPerfil: `/datadragon/iconePerfil/${invocador.profileIconId}`,
-      winRate: winRate * 10,
-      partidas: partidas.data.matches,
-      masterias: masterias.data.slice(0, 5),
-    };
+      const masterias = await instance.get(
+        `/champion-mastery/v4/champion-masteries/by-summoner/${invocador.id}`
+      );
+      return {
+        invocador,
+        imagemPerfil: `/datadragon/iconePerfil/${invocador.profileIconId}`,
+        winRate: winRate * 10,
+        partidas: dados,
+        masterias: await masterias.data.slice(0, 5),
+      };
+    } catch (error) {
+      console.log("Ocorreu um erro " + error.message);
+      throw new Error({ error: error.message });
+    }
   }
 
   async capturarRank(summonerId) {
     let dados = await instance.get(
       `/league/v4/entries/by-summoner/${summonerId}`
     );
-  
-    dados.data.forEach(q => {
-      q.emblem = `/datadragon/ranked-emblems/${q.tier}-${q.rank}`
-      q.flag = `/datadragon/ranked-flags/${q.tier}`
-    })
+
+    dados.data.forEach((q) => {
+      q.emblem = `/datadragon/ranked-emblems/${q.tier}-${q.rank}`;
+      q.flag = `/datadragon/ranked-flags/${q.tier}`;
+    });
     return dados.data;
   }
 
   async buscaPorNome(nome) {
-    const invocador = await instance.get(
-      `/summoner/v4/summoners/by-name/${encodeURIComponent(nome)}`
-    );
-    let dados = await this.dadosInvocador(invocador.data);
-    const rank = await this.capturarRank(dados.masterias[1].summonerId);
-    dados.invocador.rank = rank;
-    return dados;
+    try {
+      let dados = await this.findMongoDb(nome);
+      if (!dados) {
+        dados = await instance.get(
+          `/summoner/v4/summoners/by-name/${encodeURIComponent(nome)}`
+        );
+
+        dados = await this.dadosInvocador(dados.data);
+        let rank = await this.capturarRank(dados.masterias[1].summonerId);
+        dados.invocador.rank = rank;
+        dados = await this.saveMongoDb(dados);
+      }
+      return {
+        invocador: dados.invocador,
+        winRate: dados.invocador.winRate,
+        imagemPerfil: dados.invocador.imagemPerfil,
+        partidas: dados.partida,
+        masterias: dados.masteria,
+      };
+    } catch (error) {
+      console.log("Ocorreu um " + error.message);
+      return { error: error.message };
+    }
+  }
+
+  async saveMongoDb(dados) {
+    try {
+      let invocador = new invocation({
+        id: dados.invocador.id,
+        accountId: dados.invocador.accountId,
+        puuid: dados.invocador.puuid,
+        name: dados.invocador.name,
+        profileIconId: dados.invocador.profileIconId,
+        revisionDate: dados.invocador.revisionDate,
+        summonerLevel: dados.invocador.summonerLevel,
+        winRate: dados.winRate,
+        imagemPerfil: dados.imagemPerfil,
+        rank: dados.invocador.rank.map((rank) => {
+          return {
+            leagueId: rank.leagueId,
+            queueType: rank.queueType,
+            tier: rank.tier,
+            rank: rank.rank,
+            summonerId: rank.summonerId,
+            summonerName: rank.summonerName,
+            leaguePoints: rank.leaguePoints,
+            wins: rank.wins,
+            losses: rank.losses,
+            veteran: rank.veteran,
+            inactive: rank.inactive,
+            freshBlood: rank.freshBlood,
+            hotStreak: rank.hotStreak,
+            emblem: rank.emblem,
+          };
+        }),
+      });
+
+      await dados.partidas.forEach(async function (partida) {
+        let retorno = new partidas({
+          idInvocador: dados.invocador.id,
+          platformId: partida.platformId,
+          gameId: partida.gameId,
+          champion: {
+            key: partida.champion.key,
+            imagem: {
+              splashDesktop: partida.champion.imagem.splashDesktop,
+              splashMobile: partida.champion.imagem.splashMobile,
+              icone: partida.champion.imagem.icone,
+            },
+          },
+          queue: partida.queue,
+          season: partida.season,
+          timestamp: partida.timestamp,
+          role: partida.role,
+          lane: partida.lane,
+          dados: {
+            win: partida.dados.win,
+            duration: partida.dados.duration,
+            kda: partida.dados.kda,
+          },
+        });
+        await retorno.save();
+      });
+
+      await dados.masterias.forEach(async function (masteria) {
+        let retorno = new masterias({
+          idInvocador: dados.invocador.id,
+          championId: masteria.championId,
+          championLevel: masteria.championLevel,
+          lastPlayTime: masteria.lastPlayTime,
+          championPointsSinceLastLevel: masteria.championPointsSinceLastLevel,
+          championPointsUntilNextLevel: masteria.championPointsUntilNextLevel,
+          chestGranted: masteria.chestGranted,
+          tokensEarned: masteria.tokensEarned,
+          summonerId: masteria.summonerId,
+        });
+        await retorno.save();
+      });
+
+      await invocador.save();
+
+      var partida = await partidas.find({
+        idInvocador: dados.invocador.id,
+      });
+
+      var masteria = await masterias.find({
+        idInvocador: dados.invocador.id,
+      });
+
+      return { invocador, partida, masteria };
+    } catch (error) {
+      console.log(error.message);
+      throw new Error({ error: error.message });
+    }
+  }
+
+  async findMongoDb(name) {
+    let retorno = await invocation.find({
+      name: { $regex: name, $options: "i" },
+    });
+    if (retorno.length == 0) {
+      return false;
+    }
+    var partida = await partidas.find({
+      idInvocador: retorno[0].id,
+    });
+
+    var masteria = await masterias.find({
+      idInvocador: retorno[0].id,
+    });
+    return { invocador: retorno[0], partida, masteria };
   }
 }
 
