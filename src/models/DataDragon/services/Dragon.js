@@ -24,6 +24,18 @@ class Dragon {
       `src/assets/dragontail-10.24.1/10.24.1/img/champion/${champion}.png`
     );
   }
+
+  async rankedEmblemPath(tier){
+    return path.resolve(
+      `src/assets/ranked-emblems/${tier}.png`
+    );
+  }
+
+  async rankedFlagPath(tier){
+    return path.resolve(
+      `src/assets/ranked-flags/${tier}.png`
+    );
+  }
 }
 
 module.exports = new Dragon();
