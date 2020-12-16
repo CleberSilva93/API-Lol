@@ -1,6 +1,11 @@
 // const invocador = require("../controllers/invocadorController");
 const makeMinutes = require("../../../shared/utils/makeMinutes");
 const champions = require("../../../assets/champions.json");
+const invocation = require("../../../database/model/Invocador");
+
+const partidas = require("../../../database/model/Partidas");
+
+const masterias = require("../../../database/model/masterias");
 require("dotenv").config({
   path: ".env",
 });
@@ -18,96 +23,6 @@ const instance = axios.create({
   },
 });
 
-const mongoose = require("mongoose");
-
-const invocation = mongoose.model("Invocador", {
-  id: { type: String },
-  name: {
-    type: String,
-  },
-  accountId: { type: String },
-  puuid: { type: String },
-  profileIconId: { type: Number },
-  revisionDate: { type: Date },
-  summonerLevel: { type: Number },
-  winRate: { type: Number },
-  imagemPerfil: { type: String },
-  rank: [
-    {
-      leagueId: { type: String },
-      queueType: { type: String },
-      tier: { type: String },
-      rank: { type: String },
-      summonerId: { type: String },
-      summonerName: { type: String },
-      leaguePoints: { type: Number },
-      wins: { type: Number },
-      losses: { type: Number },
-      veteran: { type: Boolean },
-      inactive: { type: Boolean },
-      freshBlood: { type: Boolean },
-      hotStreak: { type: Boolean },
-      emblem: { type: String },
-    },
-    {
-      leagueId: { type: String },
-      queueType: { type: String },
-      tier: { type: String },
-      rank: { type: String },
-      summonerId: { type: String },
-      summonerName: { type: String },
-      leaguePoints: { type: Number },
-      wins: { type: Number },
-      losses: { type: Number },
-      veteran: { type: Boolean },
-      inactive: { type: Boolean },
-      freshBlood: { type: Boolean },
-      hotStreak: { type: Boolean },
-      emblem: { type: String },
-    },
-  ],
-});
-
-const partidas = mongoose.model("partidas", {
-  idInvocador: { type: String },
-  platformId: { type: String },
-  gameId: {
-    type: Number,
-  },
-  champion: {
-    key: { type: String },
-    imagem: {
-      splashDesktop: { type: String },
-      splashMobile: { type: String },
-      icone: { type: String },
-    },
-  },
-  queue: { type: Number },
-  season: { type: Number },
-  timestamp: { type: String },
-  role: { type: String },
-  lane: { type: String },
-  dados: {
-    win: { type: Boolean },
-    duration: { type: String },
-    kda: { type: String },
-  },
-});
-
-const masterias = mongoose.model("masterias", {
-  idInvocador: { type: String },
-  championId: {
-    type: Number,
-  },
-  championLevel: { type: Number },
-  lastPlayTime: { type: Number },
-  championPointsSinceLastLevel: { type: Number },
-  championPointsUntilNextLevel: { type: Number },
-  chestGranted: { type: Boolean },
-  tokensEarned: { type: Number },
-  summonerId: { type: String },
-});
-
 class Invocador {
   async championImages(partidas) {
     await Object.entries(partidas).map((partida) => {
@@ -120,7 +35,7 @@ class Invocador {
 
   async dadosInvocador(invocador) {
     try {
-      let teste = [];
+      let dados = [];
       let winRate = 0;
       let partidas = await instance.get(
         `/match/v4/matchlists/by-account/${invocador.accountId}?endIndex=10`
@@ -160,9 +75,9 @@ class Invocador {
           (dataDoGame.getMonth() + 1) +
           "/" +
           dataDoGame.getFullYear();
-        teste.push(game.data);
+        dados.push(game.data);
       }
-      await this.championImages(teste);
+      await this.championImages(dados);
 
       const masterias = await instance.get(
         `/champion-mastery/v4/champion-masteries/by-summoner/${invocador.id}`
@@ -171,7 +86,7 @@ class Invocador {
         invocador,
         imagemPerfil: `/datadragon/iconePerfil/${invocador.profileIconId}`,
         winRate: winRate * 10,
-        partidas: teste,
+        partidas: dados,
         masterias: await masterias.data.slice(0, 5),
       };
     } catch (error) {
@@ -184,11 +99,11 @@ class Invocador {
     let dados = await instance.get(
       `/league/v4/entries/by-summoner/${summonerId}`
     );
-  
-    dados.data.forEach(q => {
-      q.emblem = `/datadragon/ranked-emblems/${q.tier}-${q.rank}`
-      q.flag = `/datadragon/ranked-flags/${q.tier}`
-    })
+
+    dados.data.forEach((q) => {
+      q.emblem = `/datadragon/ranked-emblems/${q.tier}-${q.rank}`;
+      q.flag = `/datadragon/ranked-flags/${q.tier}`;
+    });
     return dados.data;
   }
 
@@ -205,15 +120,16 @@ class Invocador {
         dados.invocador.rank = rank;
         dados = await this.saveMongoDb(dados);
       }
-
       return {
         invocador: dados.invocador,
+        winRate: dados.invocador.winRate,
+        imagemPerfil: dados.invocador.imagemPerfil,
         partidas: dados.partida,
         masterias: dados.masteria,
       };
     } catch (error) {
-      console.log("Ocorreu um erro " + error.message);
-      throw new Error({ error: error.message });
+      console.log("Ocorreu um " + error.message);
+      return { error: error.message };
     }
   }
 
