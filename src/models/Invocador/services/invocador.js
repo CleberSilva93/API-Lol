@@ -4,11 +4,11 @@ require("dotenv").config({
 // const invocador = require("../controllers/invocadorController");
 const makeMinutes = require("../../../shared/utils/makeMinutes");
 const champions = require("../../../assets/champions.json");
-const invocation = require("../../../database/model/Invocador");
+const modelinvocation = require("../../../database/model/Invocador");
 
-const partidas = require("../../../database/model/Partidas");
+const modelpartidas = require("../../../database/model/Partidas");
 
-const masterias = require("../../../database/model/Masterias");
+const modelmasterias = require("../../../database/model/Masterias");
 
 const axios = require("axios");
 const devKey = process.env.DEV_KEY;
@@ -134,7 +134,7 @@ class Invocador {
 
   async saveMongoDb(dados) {
     try {
-      let invocador = new invocation({
+      let invocador = new modelinvocation({
         id: dados.invocador.id,
         accountId: dados.invocador.accountId,
         puuid: dados.invocador.puuid,
@@ -165,7 +165,7 @@ class Invocador {
       });
 
       await dados.partidas.forEach(async function (partida) {
-        let retorno = new partidas({
+        let retorno = new modelpartidas({
           idInvocador: dados.invocador.id,
           platformId: partida.platformId,
           gameId: partida.gameId,
@@ -192,7 +192,7 @@ class Invocador {
       });
 
       await dados.masterias.forEach(async function (masteria) {
-        let retorno = new masterias({
+        let retorno = new modelmasterias({
           idInvocador: dados.invocador.id,
           championId: masteria.championId,
           championLevel: masteria.championLevel,
