@@ -22,100 +22,6 @@ const instance = axios.create({
     "X-Riot-Token": devKey,
   },
 });
-
-<<<<<<< HEAD
-=======
-const mongoose = require("mongoose");
-
-const invocation = mongoose.model("Invocador", {
-  id: { type: String },
-  name: {
-    type: String,
-  },
-  accountId: { type: String },
-  puuid: { type: String },
-  profileIconId: { type: Number },
-  revisionDate: { type: Date },
-  summonerLevel: { type: Number },
-  winRate: { type: Number },
-  imagemPerfil: { type: String },
-  rank: [
-    {
-      leagueId: { type: String },
-      queueType: { type: String },
-      tier: { type: String },
-      rank: { type: String },
-      summonerId: { type: String },
-      summonerName: { type: String },
-      leaguePoints: { type: Number },
-      wins: { type: Number },
-      losses: { type: Number },
-      veteran: { type: Boolean },
-      inactive: { type: Boolean },
-      freshBlood: { type: Boolean },
-      hotStreak: { type: Boolean },
-      emblem: { type: String },
-    },
-    {
-      leagueId: { type: String },
-      queueType: { type: String },
-      tier: { type: String },
-      rank: { type: String },
-      summonerId: { type: String },
-      summonerName: { type: String },
-      leaguePoints: { type: Number },
-      wins: { type: Number },
-      losses: { type: Number },
-      veteran: { type: Boolean },
-      inactive: { type: Boolean },
-      freshBlood: { type: Boolean },
-      hotStreak: { type: Boolean },
-      emblem: { type: String },
-    },
-  ],
-});
-
-const partidas = mongoose.model("partidas", {
-  idInvocador: { type: String },
-  platformId: { type: String },
-  gameId: {
-    type: Number,
-  },
-  champion: {
-    key: { type: String },
-    imagem: {
-      splashDesktop: { type: String },
-      splashMobile: { type: String },
-      icone: { type: String },
-    },
-  },
-  queue: { type: Number },
-  season: { type: Number },
-  timestamp: { type: String },
-  role: { type: String },
-  lane: { type: String },
-  dados: {
-    win: { type: Boolean },
-    duration: { type: String },
-    kda: { type: String },
-  },
-});
-
-const masterias = mongoose.model("masterias", {
-  idInvocador: { type: String },
-  championId: {
-    type: Number,
-  },
-  championLevel: { type: Number },
-  lastPlayTime: { type: Number },
-  championPointsSinceLastLevel: { type: Number },
-  championPointsUntilNextLevel: { type: Number },
-  chestGranted: { type: Boolean },
-  tokensEarned: { type: Number },
-  summonerId: { type: String },
-});
-
->>>>>>> f922236cc06751d5ed966307fdf5efad96ffc2a3
 class Invocador {
   async championImages(partidas) {
     await Object.entries(partidas).map((partida) => {
@@ -213,27 +119,16 @@ class Invocador {
         dados.invocador.rank = rank;
         dados = await this.saveMongoDb(dados);
       }
-<<<<<<< HEAD
       return {
         invocador: dados.invocador,
         winRate: dados.invocador.winRate,
         imagemPerfil: dados.invocador.imagemPerfil,
-=======
-
-      return {
-        invocador: dados.invocador,
->>>>>>> f922236cc06751d5ed966307fdf5efad96ffc2a3
         partidas: dados.partida,
         masterias: dados.masteria,
       };
     } catch (error) {
-<<<<<<< HEAD
       console.log("Ocorreu um " + error.message);
       return { error: error.message };
-=======
-      console.log("Ocorreu um erro " + error.message);
-      throw new Error({ error: error.message });
->>>>>>> f922236cc06751d5ed966307fdf5efad96ffc2a3
     }
   }
 
