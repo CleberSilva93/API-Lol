@@ -7,10 +7,10 @@ module.exports = mongoose.model("Matches", {
   },
   champion: {
     key: { type: String },
-    imagem: {
+    image: {
       splashDesktop: { type: String },
       splashMobile: { type: String },
-      icone: { type: String },
+      icon: { type: String },
     },
   },
   queue: { type: Number },
@@ -18,7 +18,7 @@ module.exports = mongoose.model("Matches", {
   timestamp: { type: String },
   role: { type: String },
   lane: { type: String },
-  dados: {
+  data: {
     win: { type: Boolean },
     duration: { type: String },
     kda: { type: String },

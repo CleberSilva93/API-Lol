@@ -39,16 +39,14 @@ class Summoner {
       let matches = await instance.get(
         `/match/v4/matchlists/by-account/${summoner.accountId}?endIndex=10`
       );
-
       for (let match of matches.data.matches) {
         let game = await instance.get(`/match/v4/matches/${match.gameId}`);
-        let dataParticipants = game.data.participantIdentities.find(
-          (participant) => participant.player.summonerName === summoner.name
+        let dataParticipants = await game.data.participantIdentities.find(
+          (participant) => participant.player.summonerId == summoner.id
         );
-
-        let dataParticipant = game.data.participants.find(
+        let dataParticipant = await game.data.participants.find(
           (participant) =>
-            participant.participantId === dataParticipants.participantId
+            participant.participantId == dataParticipants.participantId
         );
 
         let dateGame = new Date(game.data.gameCreation);
@@ -83,7 +81,7 @@ class Summoner {
       );
       return {
         summoner,
-        imagemPerfil: `/datadragon/iconePerfil/${summoner.profileIconId}`,
+        imageProfile: `/datadragon/iconProfile/${summoner.profileIconId}`,
         winRate: winRate * 10,
         matches: data,
         masteries: await masteries.data.slice(0, 5),
@@ -121,7 +119,7 @@ class Summoner {
       return {
         summoner: data.summoner,
         winRate: data.summoner.winRate,
-        imagemPerfil: data.summoner.imagemPerfil,
+        imageProfile: data.summoner.imageProfile,
         matches: data.matches,
         masteries: data.mastery,
       };
@@ -142,7 +140,7 @@ class Summoner {
         revisionDate: data.summoner.revisionDate,
         summonerLevel: data.summoner.summonerLevel,
         winRate: data.winRate,
-        imagemPerfil: data.imagemPerfil,
+        imageProfile: data.imageProfile,
         rank: data.summoner.rank.map((rank) => {
           return {
             leagueId: rank.leagueId,
@@ -171,10 +169,10 @@ class Summoner {
           gameId: match.gameId,
           champion: {
             key: match.champion.key,
-            imagem: {
-              splashDesktop: match.champion.imagem.splashDesktop,
-              splashMobile: match.champion.imagem.splashMobile,
-              icone: match.champion.imagem.icone,
+            image: {
+              splashDesktop: match.champion.image.splashDesktop,
+              splashMobile: match.champion.image.splashMobile,
+              icon: match.champion.image.icon,
             },
           },
           queue: match.queue,
@@ -182,7 +180,7 @@ class Summoner {
           timestamp: match.timestamp,
           role: match.role,
           lane: match.lane,
-          dados: {
+          data: {
             win: match.data.win,
             duration: match.data.duration,
             kda: match.data.kda,
