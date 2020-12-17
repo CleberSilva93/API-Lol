@@ -1,14 +1,14 @@
 require("dotenv").config({
   path: ".env",
 });
-// const invocador = require("../controllers/invocadorController");
+// const summoner = require("../controllers/summonerController");
 const makeMinutes = require("../../../shared/utils/makeMinutes");
 const champions = require("../../../assets/champions.json");
 const modelSummoner = require("../../../database/models/Summoner");
 
 const modelMatches = require("../../../database/models/Matches");
 
-const modelMasterias = require("../../../database/models/Masterias");
+const modelMasteries = require("../../../database/models/Masteries");
 
 const axios = require("axios");
 const devKey = process.env.DEV_KEY;
@@ -78,7 +78,7 @@ class Summoner {
       }
       await this.championImages(data);
 
-      const masterias = await instance.get(
+      const masteries = await instance.get(
         `/champion-mastery/v4/champion-masteries/by-summoner/${summoner.id}`
       );
       return {
@@ -86,7 +86,7 @@ class Summoner {
         imagemPerfil: `/datadragon/iconePerfil/${summoner.profileIconId}`,
         winRate: winRate * 10,
         matches: data,
-        masterias: await masterias.data.slice(0, 5),
+        masteries: await masteries.data.slice(0, 5),
       };
     } catch (error) {
       console.log("an error has occurred: " + error.message);
@@ -114,16 +114,16 @@ class Summoner {
           `/summoner/v4/summoners/by-name/${encodeURIComponent(name)}`
         );
         data = await this.dataSummoner(data.data);
-        let rank = await this.takeRank(data.masterias[1].summonerId);
+        let rank = await this.takeRank(data.masteries[1].summonerId);
         data.summoner.rank = rank;
         data = await this.saveOnMongoDb(data);
       }
       return {
-        invocador: data.summoner,
+        summoner: data.summoner,
         winRate: data.summoner.winRate,
         imagemPerfil: data.summoner.imagemPerfil,
-        partidas: data.match,
-        masterias: data.masteria,
+        matches: data.matches,
+        masteries: data.mastery,
       };
     } catch (error) {
       console.log("an error has occurred: " + error.message);
@@ -191,32 +191,32 @@ class Summoner {
         await response.save();
       });
 
-      await data.masterias.forEach(async function (masteria) {
-        let response = new modelMasterias({
+      await data.masteries.forEach(async function (mastery) {
+        let response = new modelMasteries({
           idSummoner: data.summoner.id,
-          championId: masteria.championId,
-          championLevel: masteria.championLevel,
-          lastPlayTime: masteria.lastPlayTime,
-          championPointsSinceLastLevel: masteria.championPointsSinceLastLevel,
-          championPointsUntilNextLevel: masteria.championPointsUntilNextLevel,
-          chestGranted: masteria.chestGranted,
-          tokensEarned: masteria.tokensEarned,
-          summonerId: masteria.summonerId,
+          championId: mastery.championId,
+          championLevel: mastery.championLevel,
+          lastPlayTime: mastery.lastPlayTime,
+          championPointsSinceLastLevel: mastery.championPointsSinceLastLevel,
+          championPointsUntilNextLevel: mastery.championPointsUntilNextLevel,
+          chestGranted: mastery.chestGranted,
+          tokensEarned: mastery.tokensEarned,
+          summonerId: mastery.summonerId,
         });
         await response.save();
       });
 
       await summoner.save();
 
-      var match = await modelMatches.find({
+      var matches = await modelMatches.find({
         summonerId: data.summoner.id,
       });
 
-      var masteria = await modelMasterias.find({
+      var mastery = await modelMasteries.find({
         summonerId: data.summoner.id,
       });
 
-      return { summoner, match, masteria };
+      return { summoner, matches, mastery };
     } catch (error) {
       console.log("an error has occurred " + error.message);
       throw new Error({ error: error.message });
@@ -230,14 +230,14 @@ class Summoner {
     if (response.length == 0) {
       return false;
     }
-    var match = await modelMatches.find({
+    var matches = await modelMatches.find({
       summonerId: response[0].id,
     });
 
-    var masteria = await modelMasterias.find({
+    var mastery = await modelMasteries.find({
       summonerId: response[0].id,
     });
-    return { summoner: response[0], match, masteria };
+    return { summoner: response[0], matches, mastery };
   }
 }
 
