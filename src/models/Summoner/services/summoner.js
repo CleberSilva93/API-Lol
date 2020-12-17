@@ -211,12 +211,10 @@ class Summoner {
       var match = await modelMatches.find({
         summonerId: data.summoner.id,
       });
-      console.log(match);
 
       var masteria = await modelMasterias.find({
         summonerId: data.summoner.id,
       });
-      console.log(masteria);
 
       return { summoner, match, masteria };
     } catch (error) {
@@ -232,11 +230,9 @@ class Summoner {
     if (response.length == 0) {
       return false;
     }
-    console.log(response[0].id);
     var match = await modelMatches.find({
       summonerId: response[0].id,
     });
-    console.log(match);
 
     var masteria = await modelMasterias.find({
       summonerId: response[0].id,
