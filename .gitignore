@@ -5,3 +5,4 @@ yarn.lock
 __tests__
 coverage
 champ.js
+jest.config

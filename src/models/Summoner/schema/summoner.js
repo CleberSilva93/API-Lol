@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-export default mongoose.model("Invocador", {
+export default mongoose.model("Summoner", {
   id: { type: String },
-  nome: {
+  name: {
     type: String,
   },
   accountId: { type: String },

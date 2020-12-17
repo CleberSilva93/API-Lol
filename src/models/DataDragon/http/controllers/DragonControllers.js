@@ -1,9 +1,9 @@
 const Dragon = require("../../services/Dragon");
 
 class DragonControllers {
-  async iconeperfil(req, res) {
+  async iconProfile(req, res) {
     try {
-      const path = await Dragon.icon(req.params.profileIconId);
+      const path = await Dragon.iconProfilePath(req.params.profileIconId);
       res.set("Content-Type", "image/png");
       res.sendFile(path);
       return;
@@ -34,9 +34,9 @@ class DragonControllers {
     }
   }
 
-  async iconeChampion(req, res) {
+  async iconChampion(req, res) {
     try {
-      const path = await Dragon.iconeChampionPath(req.params.champion);
+      const path = await Dragon.iconChampionPath(req.params.champion);
       res.set("Content-Type", "image/png");
       res.sendFile(path);
       return;
@@ -45,23 +45,23 @@ class DragonControllers {
     }
   }
 
-  async rankedEmblem(req,res){
-    try{
+  async rankedEmblem(req, res) {
+    try {
       const path = await Dragon.rankedEmblemPath(req.params.tier);
       res.set("Content-Type", "image/png");
       res.sendFile(path);
-    }catch(error){
+    } catch (error) {
       return res.status(error.status).json({ error: error.message });
     }
   }
 
-  async rankedFlag(req,res){
-    try{
+  async rankedFlag(req, res) {
+    try {
       const path = await Dragon.rankedFlagPath(req.params.tier);
-      res.set("Content-type","image/png");
+      res.set("Content-type", "image/png");
       res.sendFile(path);
-    }catch(error){
-      return res.status(error.status).json({error: error.message});
+    } catch (error) {
+      return res.status(error.status).json({ error: error.message });
     }
   }
 }

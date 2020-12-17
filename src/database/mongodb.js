@@ -7,6 +7,6 @@ mongoose.connect(
     useUnifiedTopology: true,
   },
   () => {
-    console.log("Banco de dados conectado");
+    console.log("Connected Database!✅");
   }
 );

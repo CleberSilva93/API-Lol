@@ -1,11 +1,11 @@
 const routeDragon = require("express").Router();
-const DragonControllers = require("../controllers/DragonControllers");
+const dragonControllers = require("../controllers/DragonControllers");
 
-routeDragon.get("/iconePerfil/:profileIconId", DragonControllers.iconeperfil);
-routeDragon.get("/iconeChampion/:champion", DragonControllers.iconeChampion);
-routeDragon.get("/splash/mobile/:champion", DragonControllers.splashMobile);
-routeDragon.get("/splash/desktop/:champion", DragonControllers.splashDesktop);
-routeDragon.get("/ranked-emblems/:tier", DragonControllers.rankedEmblem);
-routeDragon.get("/ranked-flags/:tier", DragonControllers.rankedFlag);
+routeDragon.get("/iconePerfil/:profileIconId", dragonControllers.iconProfile);
+routeDragon.get("/iconeChampion/:champion", dragonControllers.iconChampion);
+routeDragon.get("/splash/mobile/:champion", dragonControllers.splashMobile);
+routeDragon.get("/splash/desktop/:champion", dragonControllers.splashDesktop);
+routeDragon.get("/ranked-emblems/:tier", dragonControllers.rankedEmblem);
+routeDragon.get("/ranked-flags/:tier", dragonControllers.rankedFlag);
 
 module.exports = routeDragon;

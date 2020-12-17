@@ -1,7 +1,7 @@
 const path = require("path");
 
 class Dragon {
-  async icon(IconId) {
+  async iconProfilePath(IconId) {
     return path.resolve(
       `src/assets/dragontail-10.24.1/10.24.1/img/profileicon/${IconId}.png`
     );
@@ -19,22 +19,18 @@ class Dragon {
     );
   }
 
-  async iconeChampionPath(champion) {
+  async iconChampionPath(champion) {
     return path.resolve(
       `src/assets/dragontail-10.24.1/10.24.1/img/champion/${champion}.png`
     );
   }
 
-  async rankedEmblemPath(tier){
-    return path.resolve(
-      `src/assets/ranked-emblems/${tier}.png`
-    );
+  async rankedEmblemPath(tier) {
+    return path.resolve(`src/assets/ranked-emblems/${tier}.png`);
   }
 
-  async rankedFlagPath(tier){
-    return path.resolve(
-      `src/assets/ranked-flags/${tier}.png`
-    );
+  async rankedFlagPath(tier) {
+    return path.resolve(`src/assets/ranked-flags/${tier}.png`);
   }
 }
 

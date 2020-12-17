@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-module.exports = mongoose.model("Partidas", {
-  idInvocador: { type: String },
+module.exports = mongoose.model("Matches", {
+  summonerId: { type: String },
   platformId: { type: String },
   gameId: {
     type: Number,
