@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-module.exports = mongoose.model("Masterias", {
+module.exports = mongoose.model("Masteries", {
   summonerId: { type: String },
   championId: {
     type: Number,
