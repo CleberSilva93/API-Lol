@@ -232,12 +232,14 @@ class Summoner {
     if (response.length == 0) {
       return false;
     }
+    console.log(response[0].id);
     var match = await modelMatches.find({
-      idSummoner: response[0].id,
+      summonerId: response[0].id,
     });
+    console.log(match);
 
     var masteria = await modelMasterias.find({
-      idSummoner: response[0].id,
+      summonerId: response[0].id,
     });
     return { summoner: response[0], match, masteria };
   }

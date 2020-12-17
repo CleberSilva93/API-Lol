@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 module.exports = mongoose.model("Masterias", {
-  idInvocador: { type: String },
+  summonerId: { type: String },
   championId: {
     type: Number,
   },
@@ -11,5 +11,4 @@ module.exports = mongoose.model("Masterias", {
   championPointsUntilNextLevel: { type: Number },
   chestGranted: { type: Boolean },
   tokensEarned: { type: Number },
-  summonerId: { type: String },
 });
