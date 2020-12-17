@@ -11,7 +11,7 @@ module.exports = mongoose.model("Summoner", {
   revisionDate: { type: Date },
   summonerLevel: { type: Number },
   winRate: { type: Number },
-  imagemPerfil: { type: String },
+  imageProfile: { type: String },
   rank: [
     {
       leagueId: { type: String },
