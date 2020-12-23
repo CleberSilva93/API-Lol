@@ -6,7 +6,7 @@ const Matches = require("./database/models/Matches");
 require("./database/mongodb");
 
 cron.schedule("*/45 * * * *", () => {
-  console.log("Teste de execucação" + new Date());
+  console.log("Executado!" + new Date());
   Masteries.collection.drop();
   Summoner.collection.drop();
   Matches.collection.drop();
