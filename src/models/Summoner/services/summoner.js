@@ -88,7 +88,12 @@ class Summoner {
       };
     } catch (error) {
       console.log("an error has occurred: " + error.message);
-      throw new Error({ error: error.message });
+      throw {
+        response: {
+          status: error.response.status,
+        },
+        message: error.response.statusText,
+      };
     }
   }
 
@@ -124,8 +129,11 @@ class Summoner {
         masteries: data.mastery,
       };
     } catch (error) {
-      console.log("an error has occurred: " + error.message);
-      return { error: error.message };
+      console.log("an error has occurred: " + error.response.status);
+      throw {
+        message: error.message,
+        status: error.response.status,
+      };
     }
   }
 
@@ -217,7 +225,12 @@ class Summoner {
       return { summoner, matches, mastery };
     } catch (error) {
       console.log("an error has occurred " + error.message);
-      throw new Error({ error: error.message });
+      throw {
+        response: {
+          status: error.response.status,
+        },
+        message: error.response.statusText,
+      };
     }
   }
 
