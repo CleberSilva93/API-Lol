@@ -7,7 +7,7 @@ class SummonerController {
       const summoner = await Summoner.SearchByName(name);
       return res.status(200).json(summoner);
     } catch (error) {
-      return res.status(error.status).json({ error: error.message });
+      return res.status(error.response.status).json({ error: error.message });
     }
   }
 }
