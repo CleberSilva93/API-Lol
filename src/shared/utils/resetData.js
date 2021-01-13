@@ -1,6 +1,6 @@
 const cron = require("node-cron");
 const Masteries = require("./../../models/Summoner/schema/Masteries");
-const Summoner = require("./../../models/Summoner/schema/Summoner");
+const Summoner = require("./../../models/Summoner/schema/summoner");
 const Matches = require("./../../models/Summoner/schema/Matches");
 require("./../../database/mongodb");
 
