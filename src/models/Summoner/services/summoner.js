@@ -1,6 +1,6 @@
 const makeMinutes = require("../../../shared/utils/makeMinutes");
 const champions = require("../../../assets/champions.json");
-const modelSummoner = require("../schema/Summoner");
+const modelSummoner = require("../schema/summoner");
 
 const modelMatches = require("../schema/Matches");
 
